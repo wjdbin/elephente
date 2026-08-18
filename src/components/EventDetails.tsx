@@ -1,6 +1,6 @@
 import type { ClubEvent } from '../schedule/types'
 import { formatArriveBy, formatFromTo, formatLongDate } from '../lib/date'
-import { EVENT_TYPE_LABEL, getOpponent } from '../schedule/helpers'
+import { getOpponent } from '../schedule/helpers'
 import { TypeBadge } from './TypeBadge'
 
 export function EventDetails({ event }: { event: ClubEvent }) {
@@ -12,12 +12,9 @@ export function EventDetails({ event }: { event: ClubEvent }) {
     <div className="space-y-4">
       <TypeBadge type={event.type} />
 
-      <div>
-        <p className="text-sm text-muted">{EVENT_TYPE_LABEL[event.type]}</p>
-        <h3 className="mt-1 text-xl font-bold text-ink sm:text-2xl">
-          {isMatch && opponent ? `vs ${opponent}` : event.title}
-        </h3>
-      </div>
+      {isMatch && opponent ? (
+        <h3 className="text-xl font-bold text-ink sm:text-2xl">vs {opponent}</h3>
+      ) : null}
 
       <dl className="grid gap-4 sm:grid-cols-3">
         <div>
