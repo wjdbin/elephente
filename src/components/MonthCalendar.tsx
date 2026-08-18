@@ -14,8 +14,16 @@ type Props = {
 
 export function MonthCalendar({ cells, eventsByDate, selectedYmd, todayYmd, onSelect }: Props) {
   return (
-    <div>
-      <div className="grid grid-cols-7 text-center text-[11px] font-medium text-muted sm:text-sm">
+    <div className="relative isolate">
+      <img
+        src="/logo.png"
+        alt=""
+        aria-hidden
+        className="pointer-events-none absolute left-1/2 top-[58%] w-[min(72%,20rem)] -translate-x-1/2 -translate-y-1/2 select-none opacity-[0.1] sm:w-[min(58%,24rem)] sm:opacity-[0.12]"
+      />
+
+      <div>
+        <div className="grid grid-cols-7 text-center text-[11px] font-medium text-muted sm:text-sm">
         {WEEKDAYS.map((label) => (
           <div key={label} className="py-1.5 sm:py-2">
             {label}
@@ -39,10 +47,20 @@ export function MonthCalendar({ cells, eventsByDate, selectedYmd, todayYmd, onSe
               type="button"
               onClick={() => onSelect(cell.ymd!)}
               className={`flex h-20 flex-col items-stretch rounded-lg px-px pt-0.5 sm:h-24 sm:rounded-xl sm:px-1 sm:pt-2 lg:h-28 ${
-                isSelected ? 'bg-brand text-white' : isToday ? 'bg-peach text-navy' : 'text-ink'
+                isSelected ? 'bg-brand text-white' : 'text-ink'
               }`}
             >
-              <span className="text-center text-xs font-semibold sm:text-base">{cell.day}</span>
+              <span
+                className={`mx-auto flex h-6 w-6 items-center justify-center rounded-full text-xs font-semibold sm:h-7 sm:w-7 sm:text-base ${
+                  isToday
+                    ? isSelected
+                      ? 'bg-white text-brand'
+                      : 'bg-brand text-white'
+                    : ''
+                }`}
+              >
+                {cell.day}
+              </span>
               <span className="mt-0.5 min-w-0 flex-1 space-y-px overflow-hidden px-px text-center sm:mt-1 sm:space-y-0.5 sm:px-0.5">
                 {dayEvents.slice(0, 1).map((event) => {
                   const preview = getCalendarPreview(event)
@@ -72,6 +90,7 @@ export function MonthCalendar({ cells, eventsByDate, selectedYmd, todayYmd, onSe
             </button>
           )
         })}
+        </div>
       </div>
     </div>
   )
