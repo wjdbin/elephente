@@ -33,14 +33,18 @@ npm run dev
 
 주 1회, 화면의 갱신 시각이 최근에 바뀌었는지 확인합니다.
 
-## Netlify 배포
+## Vercel 배포
 
-빌드 설정은 `netlify.toml` 에 들어 있습니다. Netlify에서 이 GitHub 저장소를 연결한 뒤, 아래 환경변수를 **Build** 에 넣습니다.
+Vercel에서 이 저장소를 import 한 뒤, 아래만 맞추면 됩니다.
 
-- `VITE_SUPABASE_URL`
-- `VITE_SUPABASE_ANON_KEY`
-
-값은 로컬 `.env.local` 과 같게 두면 됩니다. 달력·운영 주소가 바로 열리도록 `/* → /index.html` 리다이렉트도 넣어 두었습니다.
+1. **Build Command**: `npm run build`
+2. **Output Directory**: `dist`
+3. **Environment Variables**
+   - `VITE_SUPABASE_URL`
+   - `VITE_SUPABASE_ANON_KEY`
+   값은 로컬 `.env.local` 과 동일하게 넣습니다.
+4. SPA 라우팅 때문에 `refresh`(예: `/calendar`, `/edit`)가 안 되면, Vercel의 **Rewrites/Redirects**에서 아래 rewrite를 추가합니다.
+   - `/*` → `/index.html`
 
 ## 이번에 안 하는 것
 

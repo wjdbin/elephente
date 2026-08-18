@@ -40,7 +40,7 @@ export function Layout() {
             <img src="/logo.png" alt="" className="h-11 w-auto sm:h-14" />
             <div className="min-w-0">
               <p className="text-[11px] font-semibold tracking-[0.16em] text-brand">FC ELEPHENTE</p>
-              <h1 className="truncate text-base font-bold text-navy sm:text-lg">엘펜그라운드</h1>
+              <h1 className="truncate text-base font-bold text-navy sm:text-lg">엘펜그라운드 MVP</h1>
             </div>
           </Link>
           <div className="flex items-center gap-4">
