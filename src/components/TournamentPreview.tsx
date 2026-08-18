@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom'
 import type { ClubEvent } from '../schedule/types'
 import { formatShortDate } from '../lib/date'
+import { TypeBadge } from './TypeBadge'
+import { getEventPreview } from '../schedule/helpers'
 
 export function TournamentPreview({ events }: { events: ClubEvent[] }) {
   return (
@@ -14,26 +16,30 @@ export function TournamentPreview({ events }: { events: ClubEvent[] }) {
 
       {events.length === 0 ? (
         <p className="rounded-2xl border border-line bg-white px-4 py-5 text-sm text-muted">
-          다가오는 대회가 없어요
+          다가오는 WUFL·SUFA 일정이 없어요
         </p>
       ) : (
         <ul className="space-y-2">
-          {events.map((event) => (
-            <li key={event.id}>
-              <Link
-                to={`/events/${event.id}`}
-                className="flex items-baseline gap-3 rounded-2xl border border-line bg-white px-4 py-3 sm:px-5 sm:py-4"
-              >
-                <span className="w-10 shrink-0 text-sm font-semibold text-tourney sm:w-12 sm:text-base">
-                  {formatShortDate(event.date)}
-                </span>
-                <span className="min-w-0 flex-1">
-                  <span className="block truncate font-medium text-ink">{event.title}</span>
-                  <span className="block truncate text-sm text-muted">{event.place}</span>
-                </span>
-              </Link>
-            </li>
-          ))}
+          {events.map((event) => {
+            const preview = getEventPreview(event)
+            return (
+              <li key={event.id}>
+                <Link
+                  to={`/events/${event.id}`}
+                  className="flex items-start gap-3 rounded-2xl border border-line bg-white px-4 py-3 sm:px-5 sm:py-4"
+                >
+                  <span className="w-10 shrink-0 pt-0.5 text-sm font-semibold text-ink sm:w-12 sm:text-base">
+                    {formatShortDate(event.date)}
+                  </span>
+                  <span className="min-w-0 flex-1">
+                    <TypeBadge type={event.type} />
+                    <span className="mt-1 block truncate font-medium text-ink">{preview.primary}</span>
+                    <span className="block truncate text-sm text-muted">{preview.secondary}</span>
+                  </span>
+                </Link>
+              </li>
+            )
+          })}
         </ul>
       )}
     </section>

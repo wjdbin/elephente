@@ -3,7 +3,7 @@
   "events": [
     {
       "id": "tr-2026-08-18",
-      "type": "training",
+      "type": "jeongmo",
       "title": "정규 훈련",
       "date": "2026-08-18",
       "startTime": "18:00",
@@ -13,7 +13,7 @@
     },
     {
       "id": "tr-2026-08-20",
-      "type": "training",
+      "type": "jeongmo",
       "title": "정규 훈련",
       "date": "2026-08-20",
       "startTime": "18:00",
@@ -22,17 +22,18 @@
     },
     {
       "id": "mc-2026-08-23",
-      "type": "match",
+      "type": "wufl",
       "title": "친선경기 vs 이웃과",
       "date": "2026-08-23",
       "startTime": "10:00",
       "endTime": "12:00",
       "place": "상대 운동장",
+      "opponent": "이웃과",
       "note": "9:20 정문 집합"
     },
     {
       "id": "tr-2026-08-25",
-      "type": "training",
+      "type": "jeongmo",
       "title": "정규 훈련",
       "date": "2026-08-25",
       "startTime": "18:00",
@@ -41,7 +42,7 @@
     },
     {
       "id": "tr-2026-08-27",
-      "type": "training",
+      "type": "jeongmo",
       "title": "정규 훈련",
       "date": "2026-08-27",
       "startTime": "18:00",
@@ -51,7 +52,7 @@
     },
     {
       "id": "tn-2026-09-06",
-      "type": "tournament",
+      "type": "sufa",
       "title": "교내 축구대회 예선",
       "date": "2026-09-06",
       "startTime": "09:00",
@@ -61,7 +62,7 @@
     },
     {
       "id": "tr-2026-09-01",
-      "type": "training",
+      "type": "jeongmo",
       "title": "정규 훈련",
       "date": "2026-09-01",
       "startTime": "18:00",
@@ -70,7 +71,7 @@
     },
     {
       "id": "tr-2026-09-03",
-      "type": "training",
+      "type": "jeongmo",
       "title": "정규 훈련",
       "date": "2026-09-03",
       "startTime": "18:00",
@@ -79,7 +80,7 @@
     },
     {
       "id": "tn-2026-09-20",
-      "type": "tournament",
+      "type": "sufa",
       "title": "춘계리그 조별리그",
       "date": "2026-09-20",
       "startTime": "11:00",

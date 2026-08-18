@@ -46,6 +46,13 @@ Vercel에서 이 저장소를 import 한 뒤, 아래만 맞추면 됩니다.
 4. SPA 라우팅 때문에 `refresh`(예: `/calendar`, `/edit`)가 안 되면, Vercel의 **Rewrites/Redirects**에서 아래 rewrite를 추가합니다.
    - `/*` → `/index.html`
 
+## 앱으로 설치
+
+스토어 없이 홈 화면에 둘 수 있습니다. HTTPS(Vercel)에서만 설치 버튼이 뜹니다.
+
+- **Android / Chrome**: 화면 위 **설치하기**, 또는 브라우저 메뉴의 앱 설치
+- **iPhone**: Safari에서 공유 → **홈 화면에 추가**
+
 ## 이번에 안 하는 것
 
 로그인, 알림, 지도 앱, 일정 복사, 결과·소개·부원 목록, 카톡 자동 발송.

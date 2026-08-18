@@ -74,6 +74,44 @@ export function formatTimeRange(startTime?: string, endTime?: string): string {
   return startTime ?? endTime ?? '시간 미정'
 }
 
+/** 18:00부터 20:00까지 */
+export function formatFromTo(startTime?: string, endTime?: string): string {
+  if (startTime && endTime) return `${startTime}부터 ${endTime}까지`
+  if (startTime) return `${startTime}부터`
+  if (endTime) return `${endTime}까지`
+  return '시간 미정'
+}
+
+/** HH:MM에서 분을 빼기. 자정을 넘으면 dayOffset -1 */
+export function timeMinusMinutes(
+  time: string,
+  minutes: number,
+): { time: string; dayOffset: number } | undefined {
+  const matched = time.match(/^(\d{1,2}):(\d{2})$/)
+  if (!matched) return undefined
+
+  const hours = Number(matched[1])
+  const mins = Number(matched[2])
+  if (!Number.isInteger(hours) || !Number.isInteger(mins) || hours > 23 || mins > 59) return undefined
+
+  const total = hours * 60 + mins - minutes
+  const dayOffset = Math.floor(total / (24 * 60))
+  const wrapped = ((total % (24 * 60)) + 24 * 60) % (24 * 60)
+
+  return {
+    time: `${pad2(Math.floor(wrapped / 60))}:${pad2(wrapped % 60)}`,
+    dayOffset,
+  }
+}
+
+export function formatArriveBy(startTime?: string, minutesBefore = 90): string | undefined {
+  if (!startTime) return undefined
+  const result = timeMinusMinutes(startTime, minutesBefore)
+  if (!result) return undefined
+  if (result.dayOffset < 0) return `전날 ${result.time}까지`
+  return `${result.time}까지`
+}
+
 export function formatUpdatedAt(iso: string, now = new Date()): string {
   const updated = new Date(iso)
   const today = todayYmd(now)

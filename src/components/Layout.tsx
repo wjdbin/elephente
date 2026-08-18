@@ -1,4 +1,5 @@
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
+import { InstallBanner } from './InstallBanner'
 
 const tabs = [
   { to: '/', label: '오늘', end: true },
@@ -34,13 +35,13 @@ export function Layout() {
 
   return (
     <div className="flex min-h-svh flex-col bg-paper">
-      <header className="sticky top-0 z-10 border-b border-line/80 bg-paper/95 backdrop-blur">
+      <header className="sticky top-0 z-10 border-b border-line/80 bg-paper/95 pt-[env(safe-area-inset-top)] backdrop-blur">
         <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
           <Link to="/" className="flex min-w-0 items-center gap-3">
             <img src="/logo.png" alt="" className="h-11 w-auto sm:h-14" />
             <div className="min-w-0">
               <p className="text-[11px] font-semibold tracking-[0.16em] text-brand">FC ELEPHENTE</p>
-              <h1 className="truncate text-base font-bold text-navy sm:text-lg">엘펜그라운드 MVP</h1>
+              <h1 className="truncate text-base font-bold text-navy sm:text-lg">엘펜그라운드</h1>
             </div>
           </Link>
           <div className="flex items-center gap-4">
@@ -54,13 +55,14 @@ export function Layout() {
         </div>
       </header>
 
-      <main className="mx-auto w-full max-w-6xl flex-1 px-4 pb-24 pt-4 sm:px-6 sm:pt-6 md:pb-10 lg:px-8 lg:pt-8">
+      <main className="mx-auto w-full max-w-6xl flex-1 px-4 pb-[calc(6rem+env(safe-area-inset-bottom))] pt-4 sm:px-6 sm:pt-6 md:pb-10 lg:px-8 lg:pt-8">
+        <InstallBanner />
         <Outlet />
       </main>
 
       {!hideMobileNav && (
         <nav
-          className="fixed bottom-0 left-0 z-10 w-full border-t border-line bg-paper/95 backdrop-blur md:hidden"
+          className="fixed bottom-0 left-0 z-10 w-full border-t border-line bg-paper/95 pb-[env(safe-area-inset-bottom)] backdrop-blur md:hidden"
           aria-label="모바일 메뉴"
         >
           <NavItems className="grid h-14 grid-cols-3" />

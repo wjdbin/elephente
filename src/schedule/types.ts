@@ -1,4 +1,6 @@
-export type EventType = 'training' | 'match' | 'tournament'
+export const EVENT_TYPES = ['jeongmo', 'wufl', 'sufa'] as const
+
+export type EventType = (typeof EVENT_TYPES)[number]
 
 export type ClubEvent = {
   id: string
@@ -8,6 +10,7 @@ export type ClubEvent = {
   startTime?: string
   endTime?: string
   place: string
+  opponent?: string
   note?: string
 }
 

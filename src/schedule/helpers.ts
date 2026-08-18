@@ -1,10 +1,81 @@
 import type { ClubEvent, EventType } from './types'
-import { daysInMonth, toYmd, weekdaySun0 } from '../lib/date'
+import { EVENT_TYPES } from './types'
+import { daysInMonth, formatFromTo, toYmd, weekdaySun0 } from '../lib/date'
+
+const LEGACY_EVENT_TYPE: Record<string, EventType> = {
+  training: 'jeongmo',
+  match: 'wufl',
+  tournament: 'sufa',
+}
+
+export function normalizeEventType(type: string): EventType {
+  if ((EVENT_TYPES as readonly string[]).includes(type)) return type as EventType
+  return LEGACY_EVENT_TYPE[type] ?? 'jeongmo'
+}
 
 export const EVENT_TYPE_LABEL: Record<EventType, string> = {
-  training: '훈련',
-  match: '경기',
-  tournament: '대회',
+  jeongmo: '정모',
+  wufl: 'WUFL',
+  sufa: 'SUFA',
+}
+
+export const EVENT_TYPE_TEXT: Record<EventType, string> = {
+  jeongmo: 'text-brand',
+  wufl: 'text-navy',
+  sufa: 'text-tourney',
+}
+
+function compactClock(time: string): string {
+  const [hours, minutes] = time.split(':')
+  if (!hours) return time
+  return minutes === '00' ? String(Number(hours)) : `${Number(hours)}:${minutes}`
+}
+
+function formatCompactRange(startTime?: string, endTime?: string): string {
+  if (startTime && endTime) return `${compactClock(startTime)}–${compactClock(endTime)}`
+  if (startTime) return compactClock(startTime)
+  if (endTime) return compactClock(endTime)
+  return '시간 미정'
+}
+
+function opponentFromTitle(title: string): string | undefined {
+  const matched = title.match(/vs\s+(.+)$/i)
+  const value = matched?.[1]?.trim()
+  return value || undefined
+}
+
+export function getOpponent(event: ClubEvent): string | undefined {
+  return event.opponent?.trim() || opponentFromTitle(event.title)
+}
+
+export function defaultEventTitle(event: Pick<ClubEvent, 'type' | 'title' | 'opponent'>): string {
+  const title = event.title.trim()
+  if (title) return title
+  if (event.type === 'jeongmo') return '정모'
+  const opponent = event.opponent?.trim()
+  const label = EVENT_TYPE_LABEL[event.type]
+  return opponent ? `${label} vs ${opponent}` : label
+}
+
+export type EventPreview = {
+  primary: string
+  secondary: string
+}
+
+/** 달력·목록용. 정모는 시간·장소, WUFL/SUFA는 장소·상대. */
+export function getEventPreview(event: ClubEvent, compact = false): EventPreview {
+  if (event.type === 'jeongmo') {
+    return {
+      primary: compact ? formatCompactRange(event.startTime, event.endTime) : formatFromTo(event.startTime, event.endTime),
+      secondary: event.place,
+    }
+  }
+
+  const opponent = getOpponent(event)
+  return {
+    primary: event.place,
+    secondary: opponent ? `vs ${opponent}` : event.title,
+  }
 }
 
 function byTimeThenTitle(a: ClubEvent, b: ClubEvent): number {
@@ -29,7 +100,7 @@ export type TodayOrNext = {
 
 export function getTodayOrNextSessions(events: ClubEvent[], today: string): TodayOrNext | null {
   const sessions = events
-    .filter((event) => event.type === 'training' || event.type === 'match')
+    .filter((event) => event.type === 'jeongmo' || event.type === 'wufl')
     .sort((a, b) => a.date.localeCompare(b.date) || byTimeThenTitle(a, b))
 
   const todayEvents = sessions.filter((event) => event.date === today)
@@ -53,7 +124,7 @@ export function getUpcomingTournaments(
   limit?: number,
 ): ClubEvent[] {
   const upcoming = events
-    .filter((event) => event.type === 'tournament' && event.date >= today)
+    .filter((event) => (event.type === 'wufl' || event.type === 'sufa') && event.date >= today)
     .sort((a, b) => a.date.localeCompare(b.date) || byTimeThenTitle(a, b))
 
   return limit === undefined ? upcoming : upcoming.slice(0, limit)

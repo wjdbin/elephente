@@ -1,30 +1,33 @@
-import { useMemo, useState, type FormEvent } from 'react'
+import { useEffect, useMemo, useState, type FormEvent } from 'react'
 import { useSchedule } from '../schedule/context'
 import { checkAdminPin, deleteEvent, upsertEvent } from '../schedule/api'
-import { EVENT_TYPE_LABEL } from '../schedule/helpers'
-import type { ClubEvent, EventType } from '../schedule/types'
-
-const PIN_KEY = 'elephente-admin-pin'
+import { EVENT_TYPE_LABEL, defaultEventTitle, getEventPreview } from '../schedule/helpers'
+import { EVENT_TYPES, type ClubEvent, type EventType } from '../schedule/types'
 
 const emptyForm: Omit<ClubEvent, 'id'> & { id?: string } = {
-  type: 'training',
+  type: 'jeongmo',
   title: '',
   date: '',
   startTime: '',
   endTime: '',
   place: '',
+  opponent: '',
   note: '',
 }
 
 export function AdminPage() {
   const { schedule, status, reload } = useSchedule()
   const [pinInput, setPinInput] = useState('')
-  const [pin, setPin] = useState(() => sessionStorage.getItem(PIN_KEY) ?? '')
-  const [unlocked, setUnlocked] = useState(() => Boolean(sessionStorage.getItem(PIN_KEY)))
+  const [pin, setPin] = useState('')
+  const [unlocked, setUnlocked] = useState(false)
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
   const [form, setForm] = useState(emptyForm)
   const [showPin, setShowPin] = useState(false)
+
+  useEffect(() => {
+    sessionStorage.removeItem('elephente-admin-pin')
+  }, [])
 
   const events = useMemo(
     () => [...schedule.events].sort((a, b) => a.date.localeCompare(b.date) || (a.startTime ?? '').localeCompare(b.startTime ?? '')),
@@ -41,8 +44,8 @@ export function AdminPage() {
         setError('비밀번호가 달라요')
         return
       }
-      sessionStorage.setItem(PIN_KEY, pinInput)
       setPin(pinInput)
+      setPinInput('')
       setUnlocked(true)
     } catch {
       setError('운영 페이지에 연결하지 못했어요')
@@ -58,8 +61,16 @@ export function AdminPage() {
 
   async function save(event: FormEvent) {
     event.preventDefault()
-    if (!form.title || !form.date || !form.place) {
-      setError('제목, 날짜, 장소는 필수예요')
+    if (!form.date || !form.place) {
+      setError('날짜와 장소는 필수예요')
+      return
+    }
+    if (form.type === 'jeongmo' && (!form.startTime || !form.endTime)) {
+      setError('정모는 시작·끝나는 시간을 넣어 주세요')
+      return
+    }
+    if ((form.type === 'wufl' || form.type === 'sufa') && !form.opponent?.trim()) {
+      setError('상대 학교를 넣어 주세요')
       return
     }
     setError('')
@@ -68,11 +79,12 @@ export function AdminPage() {
       await upsertEvent(pin, {
         id: form.id || crypto.randomUUID(),
         type: form.type,
-        title: form.title.trim(),
+        title: defaultEventTitle({ type: form.type, title: form.title, opponent: form.opponent }),
         date: form.date,
         startTime: form.startTime || undefined,
         endTime: form.endTime || undefined,
         place: form.place.trim(),
+        opponent: form.type === 'jeongmo' ? undefined : form.opponent?.trim() || undefined,
         note: form.note?.trim() || undefined,
       })
       setForm(emptyForm)
@@ -102,13 +114,15 @@ export function AdminPage() {
     return (
       <form onSubmit={unlock} className="mx-auto max-w-sm space-y-4">
         <h2 className="text-lg font-bold text-ink">운영</h2>
-        <p className="text-sm text-muted">비밀번호를 아는 사람만 일정을 고칠 수 있어요.</p>
+        <p className="text-sm text-muted">임원진만 일정을 고칠 수 있어요. 비밀번호를 입력해 주세요.</p>
         <div className="relative">
           <input
             type={showPin ? 'text' : 'password'}
             value={pinInput}
             onChange={(e) => setPinInput(e.target.value)}
             placeholder="운영 비밀번호"
+            autoComplete="current-password"
+            autoFocus
             className="w-full rounded-2xl border border-line bg-white py-3 pl-4 pr-12"
           />
           <button
@@ -150,26 +164,48 @@ export function AdminPage() {
 
   return (
     <div className="mx-auto max-w-2xl space-y-6">
-      <div>
-        <h2 className="text-lg font-bold text-ink">일정 수정</h2>
-        <p className="mt-1 text-sm text-muted">저장하면 부원 화면에 바로 반영돼요. 톡에는 그다음에 올리면 됩니다.</p>
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <h2 className="text-lg font-bold text-ink">일정 수정</h2>
+          <p className="mt-1 text-sm text-muted">저장하면 부원 화면에 바로 반영돼요. 톡에는 그다음에 올리면 됩니다.</p>
+        </div>
+        <button
+          type="button"
+          onClick={() => {
+            setUnlocked(false)
+            setPin('')
+            setForm(emptyForm)
+            setError('')
+          }}
+          className="shrink-0 text-sm font-semibold text-muted hover:text-brand"
+        >
+          잠금
+        </button>
       </div>
 
       <form onSubmit={save} className="space-y-3 rounded-3xl border border-line bg-white p-4 sm:p-5">
         <p className="text-sm font-semibold text-ink">{form.id ? '일정 수정' : '새 일정'}</p>
         <select
           value={form.type}
-          onChange={(e) => setForm((prev) => ({ ...prev, type: e.target.value as EventType }))}
+          onChange={(e) =>
+            setForm((prev) => ({
+              ...prev,
+              type: e.target.value as EventType,
+              opponent: e.target.value === 'jeongmo' ? '' : prev.opponent,
+            }))
+          }
           className="w-full rounded-2xl border border-line px-4 py-3"
         >
-          <option value="training">훈련</option>
-          <option value="match">경기</option>
-          <option value="tournament">대회</option>
+          {EVENT_TYPES.map((type) => (
+            <option key={type} value={type}>
+              {EVENT_TYPE_LABEL[type]}
+            </option>
+          ))}
         </select>
         <input
           value={form.title}
           onChange={(e) => setForm((prev) => ({ ...prev, title: e.target.value }))}
-          placeholder="제목"
+          placeholder="제목 (선택)"
           className="w-full rounded-2xl border border-line px-4 py-3"
         />
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
@@ -198,6 +234,14 @@ export function AdminPage() {
           placeholder="장소"
           className="w-full rounded-2xl border border-line px-4 py-3"
         />
+        {form.type === 'wufl' || form.type === 'sufa' ? (
+          <input
+            value={form.opponent ?? ''}
+            onChange={(e) => setForm((prev) => ({ ...prev, opponent: e.target.value }))}
+            placeholder="상대 학교"
+            className="w-full rounded-2xl border border-line px-4 py-3"
+          />
+        ) : null}
         <input
           value={form.note ?? ''}
           onChange={(e) => setForm((prev) => ({ ...prev, note: e.target.value }))}
@@ -232,10 +276,9 @@ export function AdminPage() {
           {events.map((event) => (
             <li key={event.id} className="rounded-2xl border border-line bg-white px-4 py-3">
               <p className="text-xs font-semibold text-brand">{EVENT_TYPE_LABEL[event.type]}</p>
-              <p className="font-medium text-ink">{event.title}</p>
+              <p className="font-medium text-ink">{getEventPreview(event).primary}</p>
               <p className="text-sm text-muted">
-                {event.date} · {event.startTime ?? '시간 미정'}
-                {event.endTime ? ` – ${event.endTime}` : ''} · {event.place}
+                {event.date} · {getEventPreview(event).secondary}
               </p>
               <div className="mt-2 flex gap-3">
                 <button type="button" onClick={() => startEdit(event)} className="text-sm font-semibold text-brand">

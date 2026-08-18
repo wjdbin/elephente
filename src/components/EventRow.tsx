@@ -1,9 +1,11 @@
 import { Link } from 'react-router-dom'
 import type { ClubEvent } from '../schedule/types'
-import { formatTimeRange } from '../lib/date'
+import { getEventPreview } from '../schedule/helpers'
 import { TypeBadge } from './TypeBadge'
 
 export function EventRow({ event }: { event: ClubEvent }) {
+  const preview = getEventPreview(event)
+
   return (
     <Link
       to={`/events/${event.id}`}
@@ -11,10 +13,8 @@ export function EventRow({ event }: { event: ClubEvent }) {
     >
       <TypeBadge type={event.type} />
       <span className="min-w-0 flex-1">
-        <span className="block font-medium text-ink">{event.title}</span>
-        <span className="mt-0.5 block text-sm text-muted">
-          {formatTimeRange(event.startTime, event.endTime)} · {event.place}
-        </span>
+        <span className="block font-medium text-ink">{preview.primary}</span>
+        <span className="mt-0.5 block text-sm text-muted">{preview.secondary}</span>
       </span>
     </Link>
   )

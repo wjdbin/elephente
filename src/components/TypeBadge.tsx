@@ -2,9 +2,9 @@ import type { EventType } from '../schedule/types'
 import { EVENT_TYPE_LABEL } from '../schedule/helpers'
 
 const styles: Record<EventType, string> = {
-  training: 'bg-peach text-brand',
-  match: 'bg-navy/10 text-navy',
-  tournament: 'bg-orange-100 text-tourney',
+  jeongmo: 'bg-peach text-brand',
+  wufl: 'bg-navy/10 text-navy',
+  sufa: 'bg-orange-100 text-tourney',
 }
 
 export function TypeBadge({ type }: { type: EventType }) {

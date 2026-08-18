@@ -1,4 +1,5 @@
 import { supabase } from '../lib/supabase'
+import { normalizeEventType } from './helpers'
 import type { ClubEvent, ScheduleData } from './types'
 
 type EventRow = {
@@ -9,18 +10,20 @@ type EventRow = {
   start_time: string | null
   end_time: string | null
   place: string
+  opponent: string | null
   note: string | null
 }
 
 function toEvent(row: EventRow): ClubEvent {
   return {
     id: row.id,
-    type: row.type,
+    type: normalizeEventType(row.type),
     title: row.title,
     date: row.event_date,
     startTime: row.start_time ?? undefined,
     endTime: row.end_time ?? undefined,
     place: row.place,
+    opponent: row.opponent ?? undefined,
     note: row.note ?? undefined,
   }
 }
@@ -65,6 +68,7 @@ export async function upsertEvent(pin: string, event: ClubEvent): Promise<void> 
       startTime: event.startTime ?? '',
       endTime: event.endTime ?? '',
       place: event.place,
+      opponent: event.opponent ?? '',
       note: event.note ?? '',
     },
   })
