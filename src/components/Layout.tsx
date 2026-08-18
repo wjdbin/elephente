@@ -35,7 +35,7 @@ export function Layout() {
 
   return (
     <div className="flex min-h-svh flex-col bg-paper">
-      <header className="sticky top-0 z-10 border-b border-line/80 bg-paper/95 pt-[env(safe-area-inset-top)] backdrop-blur">
+      <header className="sticky top-0 z-20 border-b border-line/80 bg-paper pt-[env(safe-area-inset-top)]">
         <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
           <Link to="/" className="flex min-w-0 items-center gap-3">
             <img src="/logo.png" alt="" className="h-11 w-auto sm:h-14" />
@@ -62,7 +62,7 @@ export function Layout() {
 
       {!hideMobileNav && (
         <nav
-          className="fixed bottom-0 left-0 z-10 w-full border-t border-line bg-paper/95 pb-[env(safe-area-inset-bottom)] backdrop-blur md:hidden"
+          className="fixed bottom-0 left-0 z-20 w-full border-t border-line bg-paper pb-[env(safe-area-inset-bottom)] md:hidden"
           aria-label="모바일 메뉴"
         >
           <NavItems className="grid h-14 grid-cols-3" />
