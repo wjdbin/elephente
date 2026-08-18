@@ -79,7 +79,7 @@ export function AdminPage() {
       await upsertEvent(pin, {
         id: form.id || crypto.randomUUID(),
         type: form.type,
-        title: defaultEventTitle({ type: form.type, title: form.title, opponent: form.opponent }),
+        title: defaultEventTitle({ type: form.type, title: '', opponent: form.opponent }),
         date: form.date,
         startTime: form.startTime || undefined,
         endTime: form.endTime || undefined,
@@ -202,12 +202,6 @@ export function AdminPage() {
             </option>
           ))}
         </select>
-        <input
-          value={form.title}
-          onChange={(e) => setForm((prev) => ({ ...prev, title: e.target.value }))}
-          placeholder="제목 (선택)"
-          className="w-full rounded-2xl border border-line px-4 py-3"
-        />
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
           <input
             type="date"

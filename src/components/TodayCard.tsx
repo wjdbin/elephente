@@ -31,9 +31,7 @@ export function TodayCard({ slot }: { slot: TodayOrNext | null }) {
         {slot.events.map((event) => (
           <li key={event.id}>
             {slot.events.length > 1 && (
-              <p className="mb-1 text-sm font-medium text-white/80">
-                {EVENT_TYPE_LABEL[event.type]} · {event.title}
-              </p>
+              <p className="mb-1 text-sm font-medium text-white/80">{EVENT_TYPE_LABEL[event.type]}</p>
             )}
             <p className="text-[2rem] font-bold leading-none tracking-tight sm:text-5xl">
               {formatTimeRange(event.startTime, event.endTime)}
