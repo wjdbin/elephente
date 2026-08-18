@@ -1,0 +1,90 @@
+{
+  "updatedAt": "2026-08-18T14:30:00+09:00",
+  "events": [
+    {
+      "id": "tr-2026-08-18",
+      "type": "training",
+      "title": "정규 훈련",
+      "date": "2026-08-18",
+      "startTime": "18:00",
+      "endTime": "20:00",
+      "place": "대운동장",
+      "note": "풋살화, 조끼는 총무가 챙김"
+    },
+    {
+      "id": "tr-2026-08-20",
+      "type": "training",
+      "title": "정규 훈련",
+      "date": "2026-08-20",
+      "startTime": "18:00",
+      "endTime": "20:00",
+      "place": "대운동장"
+    },
+    {
+      "id": "mc-2026-08-23",
+      "type": "match",
+      "title": "친선경기 vs 이웃과",
+      "date": "2026-08-23",
+      "startTime": "10:00",
+      "endTime": "12:00",
+      "place": "상대 운동장",
+      "note": "9:20 정문 집합"
+    },
+    {
+      "id": "tr-2026-08-25",
+      "type": "training",
+      "title": "정규 훈련",
+      "date": "2026-08-25",
+      "startTime": "18:00",
+      "endTime": "20:00",
+      "place": "대운동장"
+    },
+    {
+      "id": "tr-2026-08-27",
+      "type": "training",
+      "title": "정규 훈련",
+      "date": "2026-08-27",
+      "startTime": "18:00",
+      "endTime": "20:00",
+      "place": "실내풋살장",
+      "note": "우천 시 장소. 맑으면 대운동장"
+    },
+    {
+      "id": "tn-2026-09-06",
+      "type": "tournament",
+      "title": "교내 축구대회 예선",
+      "date": "2026-09-06",
+      "startTime": "09:00",
+      "endTime": "17:00",
+      "place": "대운동장",
+      "note": "조별 대진은 당일 공지"
+    },
+    {
+      "id": "tr-2026-09-01",
+      "type": "training",
+      "title": "정규 훈련",
+      "date": "2026-09-01",
+      "startTime": "18:00",
+      "endTime": "20:00",
+      "place": "대운동장"
+    },
+    {
+      "id": "tr-2026-09-03",
+      "type": "training",
+      "title": "정규 훈련",
+      "date": "2026-09-03",
+      "startTime": "18:00",
+      "endTime": "20:00",
+      "place": "대운동장"
+    },
+    {
+      "id": "tn-2026-09-20",
+      "type": "tournament",
+      "title": "춘계리그 조별리그",
+      "date": "2026-09-20",
+      "startTime": "11:00",
+      "place": "타대 운동장",
+      "note": "교통·식사는 톡 공지와 동일하게 맞출 것"
+    }
+  ]
+}

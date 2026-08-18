@@ -1,0 +1,38 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Apple SD Gothic Neo', 'Malgun Gothic', ui-sans-serif, system-ui,
+    sans-serif;
+  --color-brand: #f5821f;
+  --color-navy: #1a2744;
+  --color-peach: #fff1e3;
+  --color-paper: #fffbf7;
+  --color-ink: #1a2744;
+  --color-muted: #64708a;
+  --color-line: #ead9c8;
+  --color-match: #1a2744;
+  --color-tourney: #b45309;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  min-height: 100svh;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
