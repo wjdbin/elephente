@@ -122,9 +122,7 @@ grant execute on function public.admin_check_pin(text) to anon, authenticated;
 grant execute on function public.admin_upsert_event(text, jsonb) to anon, authenticated;
 grant execute on function public.admin_delete_event(text, text) to anon, authenticated;
 
-insert into private.admin_pin (id, pin_hash)
-values (1, crypt('elephente', gen_salt('bf')))
-on conflict (id) do nothing;
+-- Set private.admin_pin.pin_hash in the database. Do not commit the raw password.
 
 insert into public.club_meta (id, updated_at)
 values (1, timestamptz '2026-08-18 14:30:00+09')
