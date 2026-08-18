@@ -70,7 +70,7 @@ export function getCalendarPreview(event: ClubEvent): { time: string; opponent?:
   return { time, opponent: opponent ? `vs ${opponent}` : undefined }
 }
 
-/** 목록용. 정모는 시간·장소, WUFL/SUFA는 장소·상대. */
+/** 목록용. 정모는 시간·장소, WUFL/SUFA는 상대·장소. */
 export function getEventPreview(event: ClubEvent, compact = false): EventPreview {
   if (event.type === 'jeongmo') {
     return {
@@ -81,8 +81,8 @@ export function getEventPreview(event: ClubEvent, compact = false): EventPreview
 
   const opponent = getOpponent(event)
   return {
-    primary: event.place,
-    secondary: opponent ? `vs ${opponent}` : event.title,
+    primary: opponent ? `vs ${opponent}` : event.title,
+    secondary: event.place,
   }
 }
 
