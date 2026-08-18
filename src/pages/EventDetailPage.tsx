@@ -1,8 +1,8 @@
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { formatLongDate, formatTimeRange } from '../lib/date'
-import { EVENT_TYPE_LABEL, getEventById } from '../lib/schedule'
 import { TypeBadge } from '../components/TypeBadge'
-import { useSchedule } from '../schedule/ScheduleContext'
+import { useSchedule } from '../schedule/context'
+import { EVENT_TYPE_LABEL, getEventById } from '../schedule/helpers'
 
 export function EventDetailPage() {
   const { id } = useParams()

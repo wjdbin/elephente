@@ -1,14 +1,14 @@
 import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from 'react'
-import { fileSchedule } from '../data/schedule'
-import { fetchRemoteSchedule } from '../lib/scheduleApi'
 import { supabase } from '../lib/supabase'
-import type { ScheduleData } from '../types/schedule'
+import { fetchRemoteSchedule } from './api'
+import fallbackJson from './fallback.json'
+import type { ScheduleData } from './types'
 
-export type ScheduleSource = 'remote' | 'file'
+const fallbackSchedule = fallbackJson as ScheduleData
 
 type ScheduleValue = {
   schedule: ScheduleData
-  source: ScheduleSource
+  source: 'remote' | 'file'
   status: 'loading' | 'ready'
   reload: () => Promise<void>
 }
@@ -16,13 +16,13 @@ type ScheduleValue = {
 const ScheduleContext = createContext<ScheduleValue | null>(null)
 
 export function ScheduleProvider({ children }: { children: ReactNode }) {
-  const [schedule, setSchedule] = useState<ScheduleData>(fileSchedule)
-  const [source, setSource] = useState<ScheduleSource>('file')
+  const [schedule, setSchedule] = useState<ScheduleData>(fallbackSchedule)
+  const [source, setSource] = useState<'remote' | 'file'>('file')
   const [status, setStatus] = useState<ScheduleValue['status']>(supabase ? 'loading' : 'ready')
 
   const reload = useCallback(async () => {
     if (!supabase) {
-      setSchedule(fileSchedule)
+      setSchedule(fallbackSchedule)
       setSource('file')
       setStatus('ready')
       return
@@ -30,11 +30,10 @@ export function ScheduleProvider({ children }: { children: ReactNode }) {
 
     setStatus('loading')
     try {
-      const remote = await fetchRemoteSchedule()
-      setSchedule(remote)
+      setSchedule(await fetchRemoteSchedule())
       setSource('remote')
     } catch {
-      setSchedule(fileSchedule)
+      setSchedule(fallbackSchedule)
       setSource('file')
     } finally {
       setStatus('ready')
@@ -54,6 +53,6 @@ export function ScheduleProvider({ children }: { children: ReactNode }) {
 
 export function useSchedule(): ScheduleValue {
   const value = useContext(ScheduleContext)
-  if (!value) throw new Error('useSchedule는 ScheduleProvider 안에서만 쓸 수 있어요')
+  if (!value) throw new Error('useSchedule must be used within ScheduleProvider')
   return value
 }

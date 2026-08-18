@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import type { ClubEvent } from '../types/schedule'
+import type { ClubEvent } from '../schedule/types'
 import { formatTimeRange } from '../lib/date'
 import { TypeBadge } from './TypeBadge'
 

@@ -1,8 +1,8 @@
 import { useMemo, useState, type FormEvent } from 'react'
-import { useSchedule } from '../schedule/ScheduleContext'
-import { EVENT_TYPE_LABEL } from '../lib/schedule'
-import { checkAdminPin, deleteEvent, upsertEvent } from '../lib/scheduleApi'
-import type { ClubEvent, EventType } from '../types/schedule'
+import { useSchedule } from '../schedule/context'
+import { checkAdminPin, deleteEvent, upsertEvent } from '../schedule/api'
+import { EVENT_TYPE_LABEL } from '../schedule/helpers'
+import type { ClubEvent, EventType } from '../schedule/types'
 
 const PIN_KEY = 'elephente-admin-pin'
 

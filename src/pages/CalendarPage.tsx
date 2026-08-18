@@ -1,9 +1,9 @@
 import { useMemo, useState } from 'react'
 import { addMonths, formatLongDate, formatMonthTitle, parseYmd, todayYmd } from '../lib/date'
-import { getEventsOnDate, getMonthCells } from '../lib/schedule'
 import { EventRow } from '../components/EventRow'
 import { MonthCalendar } from '../components/MonthCalendar'
-import { useSchedule } from '../schedule/ScheduleContext'
+import { useSchedule } from '../schedule/context'
+import { getEventsOnDate, getMonthCells } from '../schedule/helpers'
 
 export function CalendarPage() {
   const { schedule, status } = useSchedule()

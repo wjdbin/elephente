@@ -1,9 +1,9 @@
 import { todayYmd } from '../lib/date'
-import { getTodayOrNextSessions, getUpcomingTournaments } from '../lib/schedule'
 import { TodayCard } from '../components/TodayCard'
 import { TournamentPreview } from '../components/TournamentPreview'
 import { UpdatedAt } from '../components/UpdatedAt'
-import { useSchedule } from '../schedule/ScheduleContext'
+import { useSchedule } from '../schedule/context'
+import { getTodayOrNextSessions, getUpcomingTournaments } from '../schedule/helpers'
 
 export function HomePage() {
   const { schedule, status } = useSchedule()

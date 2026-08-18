@@ -1,5 +1,5 @@
-import type { ClubEvent, ScheduleData } from '../types/schedule'
-import { supabase } from './supabase'
+import { supabase } from '../lib/supabase'
+import type { ClubEvent, ScheduleData } from './types'
 
 type EventRow = {
   id: string
@@ -26,10 +26,14 @@ function toEvent(row: EventRow): ClubEvent {
 }
 
 export async function fetchRemoteSchedule(): Promise<ScheduleData> {
-  if (!supabase) throw new Error('supabase 없음')
+  if (!supabase) throw new Error('supabase is not configured')
 
   const [eventsResult, metaResult] = await Promise.all([
-    supabase.from('club_events').select('*').order('event_date', { ascending: true }).order('start_time', { ascending: true }),
+    supabase
+      .from('club_events')
+      .select('*')
+      .order('event_date', { ascending: true })
+      .order('start_time', { ascending: true }),
     supabase.from('club_meta').select('updated_at').eq('id', 1).maybeSingle(),
   ])
 
@@ -50,7 +54,7 @@ export async function checkAdminPin(pin: string): Promise<boolean> {
 }
 
 export async function upsertEvent(pin: string, event: ClubEvent): Promise<void> {
-  if (!supabase) throw new Error('supabase 없음')
+  if (!supabase) throw new Error('supabase is not configured')
   const { error } = await supabase.rpc('admin_upsert_event', {
     pin,
     event: {
@@ -68,7 +72,7 @@ export async function upsertEvent(pin: string, event: ClubEvent): Promise<void> 
 }
 
 export async function deleteEvent(pin: string, id: string): Promise<void> {
-  if (!supabase) throw new Error('supabase 없음')
+  if (!supabase) throw new Error('supabase is not configured')
   const { error } = await supabase.rpc('admin_delete_event', { pin, event_id: id })
   if (error) throw error
 }

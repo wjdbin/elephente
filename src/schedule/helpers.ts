@@ -1,5 +1,5 @@
-import type { ClubEvent, EventType } from '../types/schedule'
-import { daysInMonth, toYmd, weekdaySun0 } from './date'
+import type { ClubEvent, EventType } from './types'
+import { daysInMonth, toYmd, weekdaySun0 } from '../lib/date'
 
 export const EVENT_TYPE_LABEL: Record<EventType, string> = {
   training: '훈련',
@@ -7,16 +7,10 @@ export const EVENT_TYPE_LABEL: Record<EventType, string> = {
   tournament: '대회',
 }
 
-export const SESSION_TYPES: EventType[] = ['training', 'match']
-
 function byTimeThenTitle(a: ClubEvent, b: ClubEvent): number {
   const time = (a.startTime ?? '99:99').localeCompare(b.startTime ?? '99:99')
   if (time !== 0) return time
   return a.title.localeCompare(b.title, 'ko')
-}
-
-export function isSession(event: ClubEvent): boolean {
-  return SESSION_TYPES.includes(event.type)
 }
 
 export function getEventById(events: ClubEvent[], id: string): ClubEvent | undefined {
@@ -33,13 +27,10 @@ export type TodayOrNext = {
   events: ClubEvent[]
 }
 
-/** 오늘 훈련·경기. 없으면 다음 날짜의 훈련·경기. */
 export function getTodayOrNextSessions(events: ClubEvent[], today: string): TodayOrNext | null {
-  const sessions = events.filter(isSession).sort((a, b) => {
-    const date = a.date.localeCompare(b.date)
-    if (date !== 0) return date
-    return byTimeThenTitle(a, b)
-  })
+  const sessions = events
+    .filter((event) => event.type === 'training' || event.type === 'match')
+    .sort((a, b) => a.date.localeCompare(b.date) || byTimeThenTitle(a, b))
 
   const todayEvents = sessions.filter((event) => event.date === today)
   if (todayEvents.length > 0) {

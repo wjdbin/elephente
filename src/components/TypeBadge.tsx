@@ -1,5 +1,5 @@
-import type { EventType } from '../types/schedule'
-import { EVENT_TYPE_LABEL } from '../lib/schedule'
+import type { EventType } from '../schedule/types'
+import { EVENT_TYPE_LABEL } from '../schedule/helpers'
 
 const styles: Record<EventType, string> = {
   training: 'bg-peach text-brand',

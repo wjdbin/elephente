@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import type { ClubEvent } from '../types/schedule'
+import type { ClubEvent } from '../schedule/types'
 import { formatShortDate } from '../lib/date'
 
 export function TournamentPreview({ events }: { events: ClubEvent[] }) {

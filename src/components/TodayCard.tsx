@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
-import type { TodayOrNext } from '../lib/schedule'
-import { EVENT_TYPE_LABEL } from '../lib/schedule'
+import type { TodayOrNext } from '../schedule/helpers'
+import { EVENT_TYPE_LABEL } from '../schedule/helpers'
 import { formatCardDate, formatTimeRange } from '../lib/date'
 
 export function TodayCard({ slot }: { slot: TodayOrNext | null }) {

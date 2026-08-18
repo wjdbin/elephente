@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { formatLongDate, formatTimeRange, todayYmd } from '../lib/date'
-import { getUpcomingTournaments } from '../lib/schedule'
-import { useSchedule } from '../schedule/ScheduleContext'
+import { useSchedule } from '../schedule/context'
+import { getUpcomingTournaments } from '../schedule/helpers'
 
 export function TournamentsPage() {
   const { schedule, status } = useSchedule()

@@ -1,6 +1,6 @@
-import type { ClubEvent } from '../types/schedule'
-import type { MonthCell } from '../lib/schedule'
-import { EVENT_TYPE_LABEL } from '../lib/schedule'
+import type { ClubEvent } from '../schedule/types'
+import type { MonthCell } from '../schedule/helpers'
+import { EVENT_TYPE_LABEL } from '../schedule/helpers'
 
 const WEEKDAYS = ['일', '월', '화', '수', '목', '금', '토']
 
