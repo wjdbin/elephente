@@ -1,6 +1,6 @@
 import type { ClubEvent } from '../schedule/types'
 import type { MonthCell } from '../schedule/helpers'
-import { EVENT_TYPE_TEXT, getEventPreview } from '../schedule/helpers'
+import { EVENT_TYPE_LABEL, EVENT_TYPE_TEXT, getCalendarPreview } from '../schedule/helpers'
 
 const WEEKDAYS = ['일', '월', '화', '수', '목', '금', '토']
 
@@ -26,7 +26,7 @@ export function MonthCalendar({ cells, eventsByDate, selectedYmd, todayYmd, onSe
       <div className="grid grid-cols-7 gap-px sm:gap-1">
         {cells.map((cell, index) => {
           if (!cell.ymd) {
-            return <div key={`empty-${index}`} className="h-[4.75rem] sm:h-24 lg:h-28" />
+            return <div key={`empty-${index}`} className="h-20 sm:h-24 lg:h-28" />
           }
 
           const dayEvents = eventsByDate.get(cell.ymd) ?? []
@@ -38,23 +38,28 @@ export function MonthCalendar({ cells, eventsByDate, selectedYmd, todayYmd, onSe
               key={cell.ymd}
               type="button"
               onClick={() => onSelect(cell.ymd!)}
-              className={`flex h-[4.75rem] flex-col items-stretch rounded-lg px-px pt-0.5 sm:h-24 sm:rounded-xl sm:px-1 sm:pt-2 lg:h-28 ${
+              className={`flex h-20 flex-col items-stretch rounded-lg px-px pt-0.5 sm:h-24 sm:rounded-xl sm:px-1 sm:pt-2 lg:h-28 ${
                 isSelected ? 'bg-brand text-white' : isToday ? 'bg-peach text-navy' : 'text-ink'
               }`}
             >
               <span className="text-center text-xs font-semibold sm:text-base">{cell.day}</span>
-              <span className="mt-0.5 min-w-0 flex-1 space-y-px overflow-hidden px-px sm:mt-1 sm:space-y-0.5 sm:px-0.5">
+              <span className="mt-0.5 min-w-0 flex-1 space-y-px overflow-hidden px-px text-center sm:mt-1 sm:space-y-0.5 sm:px-0.5">
                 {dayEvents.slice(0, 1).map((event) => {
-                  const preview = getEventPreview(event, true)
+                  const preview = getCalendarPreview(event)
                   const tone = isSelected ? 'text-white/90' : EVENT_TYPE_TEXT[event.type]
                   return (
-                    <span key={event.id} className="block text-left">
-                      <span className={`block truncate text-[8px] leading-tight sm:text-[10px] lg:text-xs ${tone}`}>
-                        {preview.primary}
+                    <span key={event.id} className="block">
+                      <span className={`block truncate text-[8px] font-semibold leading-tight sm:text-[10px] lg:text-xs ${tone}`}>
+                        {EVENT_TYPE_LABEL[event.type]}
                       </span>
                       <span className={`block truncate text-[8px] leading-tight sm:text-[10px] lg:text-xs ${tone}`}>
-                        {preview.secondary}
+                        {preview.time}
                       </span>
+                      {preview.opponent ? (
+                        <span className={`block truncate text-[8px] leading-tight sm:text-[10px] lg:text-xs ${tone}`}>
+                          {preview.opponent}
+                        </span>
+                      ) : null}
                     </span>
                   )
                 })}

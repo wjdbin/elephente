@@ -25,6 +25,8 @@ export function CalendarPage() {
   }, [schedule.events])
 
   const selectedEvents = selectedYmd ? getEventsOnDate(schedule.events, selectedYmd) : []
+  const prevMonth = addMonths(cursor.year, cursor.month, -1).month
+  const nextMonth = addMonths(cursor.year, cursor.month, 1).month
 
   function go(delta: number) {
     setCursor((prev) => addMonths(prev.year, prev.month, delta))
@@ -38,11 +40,11 @@ export function CalendarPage() {
     <div className="mx-auto max-w-4xl space-y-4">
       <div className="flex items-center justify-between">
         <button type="button" onClick={() => go(-1)} className="px-2 py-1 text-sm font-semibold text-brand">
-          이전
+          {prevMonth}월
         </button>
         <h2 className="text-base font-bold text-ink sm:text-lg">{formatMonthTitle(cursor.year, cursor.month)}</h2>
         <button type="button" onClick={() => go(1)} className="px-2 py-1 text-sm font-semibold text-brand">
-          다음
+          {nextMonth}월
         </button>
       </div>
 

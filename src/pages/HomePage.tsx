@@ -3,6 +3,7 @@ import { TodayCard } from '../components/TodayCard'
 import { TournamentPreview } from '../components/TournamentPreview'
 import { UpdatedAt } from '../components/UpdatedAt'
 import { useSchedule } from '../schedule/context'
+import { ElpeniHome } from '../components/ElpeniHome'
 import { getTodayOrNextSessions, getUpcomingTournaments } from '../schedule/helpers'
 
 export function HomePage() {
@@ -19,8 +20,11 @@ export function HomePage() {
     <div className="space-y-4 md:space-y-6">
       <UpdatedAt iso={schedule.updatedAt} />
       <div className="grid gap-6 lg:grid-cols-12 lg:gap-8">
-        <div className="lg:col-span-7">
-          <TodayCard slot={slot} />
+        <div className="flex items-end gap-2 sm:gap-4 lg:col-span-7">
+          <div className="min-w-0 flex-1">
+            <TodayCard slot={slot} />
+          </div>
+          <ElpeniHome />
         </div>
         <div className="lg:col-span-5">
           <TournamentPreview events={tournaments} />

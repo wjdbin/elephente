@@ -62,7 +62,15 @@ export type EventPreview = {
   secondary: string
 }
 
-/** 달력·목록용. 정모는 시간·장소, WUFL/SUFA는 장소·상대. */
+/** 달력 칸용. 시간·상대만. 장소는 상세에서. */
+export function getCalendarPreview(event: ClubEvent): { time: string; opponent?: string } {
+  const time = formatCompactRange(event.startTime, event.endTime)
+  if (event.type === 'jeongmo') return { time }
+  const opponent = getOpponent(event)
+  return { time, opponent: opponent ? `vs ${opponent}` : undefined }
+}
+
+/** 목록용. 정모는 시간·장소, WUFL/SUFA는 장소·상대. */
 export function getEventPreview(event: ClubEvent, compact = false): EventPreview {
   if (event.type === 'jeongmo') {
     return {
