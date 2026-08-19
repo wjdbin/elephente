@@ -3,6 +3,7 @@ import { EVENT_TYPE_LABEL } from '../schedule/helpers'
 
 const styles: Record<EventType, string> = {
   jeongmo: 'bg-peach text-brand',
+  extra_jeongmo: 'bg-brand/15 text-brand',
   wufl: 'bg-navy/10 text-navy',
   sufa: 'bg-orange-100 text-tourney',
 }

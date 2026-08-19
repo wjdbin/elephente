@@ -1,5 +1,5 @@
 import type { ClubEvent, EventType } from './types'
-import { EVENT_TYPES } from './types'
+import { EVENT_TYPES, isJeongmoType, isMatchType } from './types'
 import { daysInMonth, formatFromTo, toYmd, weekdaySun0 } from '../lib/date'
 
 const LEGACY_EVENT_TYPE: Record<string, EventType> = {
@@ -15,12 +15,14 @@ export function normalizeEventType(type: string): EventType {
 
 export const EVENT_TYPE_LABEL: Record<EventType, string> = {
   jeongmo: '정모',
+  extra_jeongmo: '추가정모',
   wufl: 'WUFL',
   sufa: 'SUFA',
 }
 
 export const EVENT_TYPE_TEXT: Record<EventType, string> = {
   jeongmo: 'text-brand',
+  extra_jeongmo: 'text-brand',
   wufl: 'text-navy',
   sufa: 'text-tourney',
 }
@@ -52,6 +54,7 @@ export function defaultEventTitle(event: Pick<ClubEvent, 'type' | 'title' | 'opp
   const title = event.title.trim()
   if (title) return title
   if (event.type === 'jeongmo') return '정모'
+  if (event.type === 'extra_jeongmo') return '추가정모'
   const opponent = event.opponent?.trim()
   const label = EVENT_TYPE_LABEL[event.type]
   return opponent ? `${label} vs ${opponent}` : label
@@ -65,23 +68,23 @@ export type EventPreview = {
 /** 달력 칸용. 시간·상대만. 장소는 상세에서. */
 export function getCalendarPreview(event: ClubEvent): { time: string; opponent?: string } {
   const time = formatCompactRange(event.startTime, event.endTime)
-  if (event.type === 'jeongmo') return { time }
+  if (isJeongmoType(event.type)) return { time }
   const opponent = getOpponent(event)
   return { time, opponent: opponent ? `vs ${opponent}` : undefined }
 }
 
-/** 달력 칸이 좁을 때. WUFL/SUFA는 종류+상대, 정모는 종류만. */
+/** 달력 칸이 좁을 때. WUFL/SUFA는 종류+상대, 정모·추가정모는 종류만. */
 export function getCalendarCompactLabel(event: ClubEvent): string {
-  if (event.type === 'jeongmo') return EVENT_TYPE_LABEL[event.type]
+  if (isJeongmoType(event.type)) return EVENT_TYPE_LABEL[event.type]
   const opponent = getOpponent(event)
   if (opponent) return `${EVENT_TYPE_LABEL[event.type]} ${opponent}`
   if (event.type === 'sufa') return event.title.trim() || EVENT_TYPE_LABEL.sufa
   return EVENT_TYPE_LABEL[event.type]
 }
 
-/** 목록용. 정모는 시간·장소, WUFL/SUFA는 상대·장소. */
+/** 목록용. 정모·추가정모는 시간·장소, WUFL/SUFA는 상대·장소. */
 export function getEventPreview(event: ClubEvent, compact = false): EventPreview {
-  if (event.type === 'jeongmo') {
+  if (isJeongmoType(event.type)) {
     return {
       primary: compact ? formatCompactRange(event.startTime, event.endTime) : formatFromTo(event.startTime, event.endTime),
       secondary: event.place,
@@ -117,7 +120,7 @@ export type TodayOrNext = {
 
 export function getTodayOrNextSessions(events: ClubEvent[], today: string): TodayOrNext | null {
   const sessions = events
-    .filter((event) => event.type === 'jeongmo' || event.type === 'wufl')
+    .filter((event) => isJeongmoType(event.type) || event.type === 'wufl')
     .sort((a, b) => a.date.localeCompare(b.date) || byTimeThenTitle(a, b))
 
   const todayEvents = sessions.filter((event) => event.date === today)
@@ -141,7 +144,7 @@ export function getUpcomingTournaments(
   limit?: number,
 ): ClubEvent[] {
   const upcoming = events
-    .filter((event) => (event.type === 'wufl' || event.type === 'sufa') && event.date >= today)
+    .filter((event) => isMatchType(event.type) && event.date >= today)
     .sort((a, b) => a.date.localeCompare(b.date) || byTimeThenTitle(a, b))
 
   return limit === undefined ? upcoming : upcoming.slice(0, limit)

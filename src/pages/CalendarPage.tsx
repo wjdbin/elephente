@@ -48,9 +48,12 @@ export function CalendarPage() {
         </button>
       </div>
 
-      <div className="flex items-center justify-center gap-3 text-[11px] text-muted sm:text-xs">
+      <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[11px] text-muted sm:text-xs">
         <span className="inline-flex items-center gap-1">
           <i className="inline-block h-1.5 w-1.5 rounded-full bg-brand" /> 정모
+        </span>
+        <span className="inline-flex items-center gap-1">
+          <i className="inline-block h-1.5 w-1.5 rounded-full bg-brand/60" /> 추가정모
         </span>
         <span className="inline-flex items-center gap-1">
           <i className="inline-block h-1.5 w-1.5 rounded-full bg-match" /> WUFL

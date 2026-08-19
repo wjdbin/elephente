@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState, type FormEvent } from 'react'
 import { useSchedule } from '../schedule/context'
 import { checkAdminPin, deleteEvent, upsertEvent } from '../schedule/api'
 import { EVENT_TYPE_LABEL, defaultEventTitle, getEventPreview } from '../schedule/helpers'
-import { EVENT_TYPES, type ClubEvent, type EventType } from '../schedule/types'
+import { EVENT_TYPES, isJeongmoType, isMatchType, type ClubEvent, type EventType } from '../schedule/types'
 
 const emptyForm: Omit<ClubEvent, 'id'> & { id?: string } = {
   type: 'jeongmo',
@@ -65,11 +65,11 @@ export function AdminPage() {
       setError('날짜와 장소는 필수예요')
       return
     }
-    if (form.type === 'jeongmo' && (!form.startTime || !form.endTime)) {
-      setError('정모는 시작·끝나는 시간을 넣어 주세요')
+    if (isJeongmoType(form.type) && (!form.startTime || !form.endTime)) {
+      setError('정모·추가정모는 시작·끝나는 시간을 넣어 주세요')
       return
     }
-    if ((form.type === 'wufl' || form.type === 'sufa') && !form.opponent?.trim()) {
+    if (isMatchType(form.type) && !form.opponent?.trim()) {
       setError('상대 학교를 넣어 주세요')
       return
     }
@@ -84,7 +84,7 @@ export function AdminPage() {
         startTime: form.startTime || undefined,
         endTime: form.endTime || undefined,
         place: form.place.trim(),
-        opponent: form.type === 'jeongmo' ? undefined : form.opponent?.trim() || undefined,
+        opponent: isJeongmoType(form.type) ? undefined : form.opponent?.trim() || undefined,
         note: form.note?.trim() || undefined,
       })
       setForm(emptyForm)
@@ -191,7 +191,7 @@ export function AdminPage() {
             setForm((prev) => ({
               ...prev,
               type: e.target.value as EventType,
-              opponent: e.target.value === 'jeongmo' ? '' : prev.opponent,
+              opponent: isJeongmoType(e.target.value as EventType) ? '' : prev.opponent,
             }))
           }
           className="w-full rounded-2xl border border-line px-4 py-3"
@@ -228,7 +228,7 @@ export function AdminPage() {
           placeholder="장소"
           className="w-full rounded-2xl border border-line px-4 py-3"
         />
-        {form.type === 'wufl' || form.type === 'sufa' ? (
+        {isMatchType(form.type) ? (
           <input
             value={form.opponent ?? ''}
             onChange={(e) => setForm((prev) => ({ ...prev, opponent: e.target.value }))}

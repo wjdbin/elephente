@@ -1,11 +1,12 @@
 import type { ClubEvent } from '../schedule/types'
 import { formatArriveBy, formatFromTo, formatLongDate } from '../lib/date'
 import { getOpponent } from '../schedule/helpers'
+import { isJeongmoType, isMatchType } from '../schedule/types'
 import { TypeBadge } from './TypeBadge'
 
 export function EventDetails({ event }: { event: ClubEvent }) {
   const opponent = getOpponent(event)
-  const isMatch = event.type === 'wufl' || event.type === 'sufa'
+  const isMatch = isMatchType(event.type)
   const arriveBy = isMatch ? formatArriveBy(event.startTime) : undefined
 
   return (
@@ -21,7 +22,7 @@ export function EventDetails({ event }: { event: ClubEvent }) {
           <dt className="text-xs font-medium text-muted">날짜</dt>
           <dd className="mt-1 text-base font-semibold text-ink sm:text-lg">{formatLongDate(event.date)}</dd>
         </div>
-        {event.type === 'jeongmo' || event.startTime || event.endTime ? (
+        {isJeongmoType(event.type) || event.startTime || event.endTime ? (
           <div>
             <dt className="text-xs font-medium text-muted">시간</dt>
             <dd className="mt-1 text-base font-semibold text-ink sm:text-lg">
