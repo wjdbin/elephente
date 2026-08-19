@@ -70,6 +70,15 @@ export function getCalendarPreview(event: ClubEvent): { time: string; opponent?:
   return { time, opponent: opponent ? `vs ${opponent}` : undefined }
 }
 
+/** 달력 칸이 좁을 때. WUFL/SUFA는 종류+상대, 정모는 종류만. */
+export function getCalendarCompactLabel(event: ClubEvent): string {
+  if (event.type === 'jeongmo') return EVENT_TYPE_LABEL[event.type]
+  const opponent = getOpponent(event)
+  if (opponent) return `${EVENT_TYPE_LABEL[event.type]} ${opponent}`
+  if (event.type === 'sufa') return event.title.trim() || EVENT_TYPE_LABEL.sufa
+  return EVENT_TYPE_LABEL[event.type]
+}
+
 /** 목록용. 정모는 시간·장소, WUFL/SUFA는 상대·장소. */
 export function getEventPreview(event: ClubEvent, compact = false): EventPreview {
   if (event.type === 'jeongmo') {

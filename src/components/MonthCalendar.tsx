@@ -1,6 +1,6 @@
 import type { ClubEvent } from '../schedule/types'
 import type { MonthCell } from '../schedule/helpers'
-import { EVENT_TYPE_LABEL, EVENT_TYPE_TEXT, getCalendarPreview } from '../schedule/helpers'
+import { EVENT_TYPE_LABEL, EVENT_TYPE_TEXT, getCalendarCompactLabel, getCalendarPreview } from '../schedule/helpers'
 
 const WEEKDAYS = ['일', '월', '화', '수', '목', '금', '토']
 
@@ -62,30 +62,46 @@ export function MonthCalendar({ cells, eventsByDate, selectedYmd, todayYmd, onSe
                 {cell.day}
               </span>
               <span className="mt-0.5 min-w-0 flex-1 space-y-px overflow-hidden px-px text-center sm:mt-1 sm:space-y-0.5 sm:px-0.5">
-                {dayEvents.slice(0, 1).map((event) => {
-                  const preview = getCalendarPreview(event)
-                  const tone = isSelected ? 'text-white/90' : EVENT_TYPE_TEXT[event.type]
-                  return (
-                    <span key={event.id} className="block">
-                      <span className={`block truncate text-[8px] font-semibold leading-tight sm:text-[10px] lg:text-xs ${tone}`}>
-                        {EVENT_TYPE_LABEL[event.type]}
-                      </span>
-                      <span className={`block truncate text-[8px] leading-tight sm:text-[10px] lg:text-xs ${tone}`}>
-                        {preview.time}
-                      </span>
-                      {preview.opponent ? (
-                        <span className={`block truncate text-[8px] leading-tight sm:text-[10px] lg:text-xs ${tone}`}>
-                          {preview.opponent}
+                {dayEvents.length >= 2 ? (
+                  <>
+                    {dayEvents.slice(0, 2).map((event) => {
+                      const tone = isSelected ? 'text-white/90' : EVENT_TYPE_TEXT[event.type]
+                      return (
+                        <span
+                          key={event.id}
+                          className={`block truncate text-[8px] font-semibold leading-tight sm:text-[10px] lg:text-xs ${tone}`}
+                        >
+                          {getCalendarCompactLabel(event)}
                         </span>
-                      ) : null}
-                    </span>
-                  )
-                })}
-                {dayEvents.length > 1 ? (
-                  <span className={`block text-[8px] sm:text-[10px] ${isSelected ? 'text-white/80' : 'text-muted'}`}>
-                    +{dayEvents.length - 1}
-                  </span>
-                ) : null}
+                      )
+                    })}
+                    {dayEvents.length > 2 ? (
+                      <span className={`block text-[8px] sm:text-[10px] ${isSelected ? 'text-white/80' : 'text-muted'}`}>
+                        +{dayEvents.length - 2}
+                      </span>
+                    ) : null}
+                  </>
+                ) : (
+                  dayEvents.slice(0, 1).map((event) => {
+                    const preview = getCalendarPreview(event)
+                    const tone = isSelected ? 'text-white/90' : EVENT_TYPE_TEXT[event.type]
+                    return (
+                      <span key={event.id} className="block">
+                        <span className={`block truncate text-[8px] font-semibold leading-tight sm:text-[10px] lg:text-xs ${tone}`}>
+                          {EVENT_TYPE_LABEL[event.type]}
+                        </span>
+                        <span className={`block truncate text-[8px] leading-tight sm:text-[10px] lg:text-xs ${tone}`}>
+                          {preview.time}
+                        </span>
+                        {preview.opponent ? (
+                          <span className={`block truncate text-[8px] leading-tight sm:text-[10px] lg:text-xs ${tone}`}>
+                            {preview.opponent}
+                          </span>
+                        ) : null}
+                      </span>
+                    )
+                  })
+                )}
               </span>
             </button>
           )
