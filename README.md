@@ -54,7 +54,7 @@ Vercel에서 이 저장소를 import 한 뒤, 아래만 맞추면 됩니다.
 
 `vercel.json` 에 SPA rewrite가 들어 있어서 `/calendar`, `/edit` 새로고침도 됩니다.
 
-링크를 톡에 공유하면 `public/og.png` 미리보기가 나갑니다. 원본은 `public/og-source.jpg` 에 두고, `npm run og` 로 1200×630 PNG를 다시 만듭니다. 카카오톡에서 이미지가 안 보이면 `index.html` 의 `og:image` 를 `https://실제도메인/og.png` 전체 주소로 바꿉니다.
+링크를 톡에 공유하면 `public/og-matchday.png` 미리보기가 나갑니다. 원본은 `public/og-source.jpg` 에 두고, `npm run og` 로 PNG를 다시 만듭니다. 카카오톡에 예전 이미지가 보이면 [OG 캐시 초기화](https://developers.kakao.com/tool/clear/og)에서 `https://elephente.vercel.app` 을 입력하세요.
 
 ## 앱으로 설치
 

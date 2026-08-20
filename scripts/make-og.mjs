@@ -4,11 +4,13 @@ import sharp from 'sharp'
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const source = path.join(root, 'public/og-source.jpg')
-const out = path.join(root, 'public/og.png')
+const out = path.join(root, 'public/og-matchday.png')
 
 await sharp(source)
   .resize(1200, 630, { fit: 'cover', position: 'centre' })
   .png()
   .toFile(out)
 
-console.log('wrote public/og.png')
+await sharp(out).toFile(path.join(root, 'public/og.png'))
+
+console.log('wrote public/og-matchday.png')

@@ -10,7 +10,7 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       injectRegister: false,
-      includeAssets: ['favicon.ico', 'favicon-32x32.png', 'apple-touch-icon.png', 'logo.png', 'og.png'],
+      includeAssets: ['favicon.ico', 'favicon-32x32.png', 'apple-touch-icon.png', 'logo.png', 'og.png', 'og-matchday.png'],
       manifest: {
         name: '엘펜그라운드',
         short_name: '엘펜그라운드',
