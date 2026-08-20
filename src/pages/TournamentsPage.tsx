@@ -14,10 +14,10 @@ export function TournamentsPage() {
 
   return (
     <div className="space-y-4">
-      <h2 className="text-base font-bold text-ink sm:text-lg">다가오는 대회</h2>
+      <h2 className="text-base font-bold text-ink sm:text-lg">다가오는 경기·대회</h2>
       {tournaments.length === 0 ? (
         <p className="rounded-2xl border border-line bg-white px-4 py-5 text-sm text-muted">
-          다가오는 WUFL·SUFA 일정이 없어요
+          다가오는 경기·대회 일정이 없어요
         </p>
       ) : (
         <ul className="grid gap-2 sm:grid-cols-2 sm:gap-3">

@@ -14,7 +14,7 @@ export default defineConfig({
       manifest: {
         name: '엘펜그라운드',
         short_name: '엘펜그라운드',
-        description: '엘펜 부원을 위한 정모·WUFL·SUFA 일정',
+        description: '엘펜 부원을 위한 정모·킥키타카·SUFA·친선·기타 대회 일정',
         lang: 'ko',
         start_url: '/',
         scope: '/',

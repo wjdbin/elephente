@@ -8,7 +8,7 @@ export function TournamentPreview({ events }: { events: ClubEvent[] }) {
   return (
     <section className="h-full">
       <div className="mb-3 flex items-baseline justify-between">
-        <h2 className="text-base font-bold text-ink sm:text-lg">다가오는 대회</h2>
+        <h2 className="text-base font-bold text-ink sm:text-lg">다가오는 경기·대회</h2>
         <Link to="/tournaments" className="text-sm font-semibold text-brand">
           더보기
         </Link>
@@ -16,7 +16,7 @@ export function TournamentPreview({ events }: { events: ClubEvent[] }) {
 
       {events.length === 0 ? (
         <p className="rounded-2xl border border-line bg-white px-4 py-5 text-sm text-muted">
-          다가오는 WUFL·SUFA 일정이 없어요
+          다가오는 경기·대회 일정이 없어요
         </p>
       ) : (
         <ul className="space-y-2">

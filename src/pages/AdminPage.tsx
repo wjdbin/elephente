@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState, type FormEvent } from 'react'
 import { useSchedule } from '../schedule/context'
 import { checkAdminPin, deleteEvent, upsertEvent } from '../schedule/api'
 import { EVENT_TYPE_LABEL, defaultEventTitle, getEventPreview } from '../schedule/helpers'
-import { EVENT_TYPES, isJeongmoType, isMatchType, type ClubEvent, type EventType } from '../schedule/types'
+import { EVENT_TYPES, isJeongmoType, isMatchType, requiresOpponent, type ClubEvent, type EventType } from '../schedule/types'
 
 const emptyForm: Omit<ClubEvent, 'id'> & { id?: string } = {
   type: 'jeongmo',
@@ -69,8 +69,8 @@ export function AdminPage() {
       setError('정모·추가정모는 시작·끝나는 시간을 넣어 주세요')
       return
     }
-    if (isMatchType(form.type) && !form.opponent?.trim()) {
-      setError('상대 학교를 넣어 주세요')
+    if (requiresOpponent(form.type) && !form.opponent?.trim()) {
+      setError('상대를 넣어 주세요')
       return
     }
     setError('')
@@ -232,7 +232,7 @@ export function AdminPage() {
           <input
             value={form.opponent ?? ''}
             onChange={(e) => setForm((prev) => ({ ...prev, opponent: e.target.value }))}
-            placeholder="상대 학교"
+            placeholder={requiresOpponent(form.type) ? '상대 (필수)' : '상대 (선택)'}
             className="w-full rounded-2xl border border-line px-4 py-3"
           />
         ) : null}

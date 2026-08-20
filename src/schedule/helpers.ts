@@ -4,8 +4,9 @@ import { daysInMonth, formatFromTo, toYmd, weekdaySun0 } from '../lib/date'
 
 const LEGACY_EVENT_TYPE: Record<string, EventType> = {
   training: 'jeongmo',
-  match: 'wufl',
+  match: 'kickkitaka',
   tournament: 'sufa',
+  wufl: 'kickkitaka',
 }
 
 export function normalizeEventType(type: string): EventType {
@@ -16,15 +17,19 @@ export function normalizeEventType(type: string): EventType {
 export const EVENT_TYPE_LABEL: Record<EventType, string> = {
   jeongmo: '정모',
   extra_jeongmo: '추가정모',
-  wufl: 'WUFL',
+  kickkitaka: '킥키타카',
   sufa: 'SUFA',
+  friendly: '친선',
+  other_tournament: '기타 대회',
 }
 
 export const EVENT_TYPE_TEXT: Record<EventType, string> = {
   jeongmo: 'text-brand',
   extra_jeongmo: 'text-brand',
-  wufl: 'text-navy',
+  kickkitaka: 'text-navy',
   sufa: 'text-tourney',
+  friendly: 'text-friendly',
+  other_tournament: 'text-other',
 }
 
 function compactClock(time: string): string {
@@ -73,16 +78,18 @@ export function getCalendarPreview(event: ClubEvent): { time: string; opponent?:
   return { time, opponent: opponent ? `vs ${opponent}` : undefined }
 }
 
-/** 달력 칸이 좁을 때. WUFL/SUFA는 종류+상대, 정모·추가정모는 종류만. */
+/** 달력 칸이 좁을 때. 킥키타카/SUFA 등은 종류+상대, 정모·추가정모는 종류만. */
 export function getCalendarCompactLabel(event: ClubEvent): string {
   if (isJeongmoType(event.type)) return EVENT_TYPE_LABEL[event.type]
   const opponent = getOpponent(event)
   if (opponent) return `${EVENT_TYPE_LABEL[event.type]} ${opponent}`
-  if (event.type === 'sufa') return event.title.trim() || EVENT_TYPE_LABEL.sufa
+  if (event.type === 'sufa' || event.type === 'other_tournament') {
+    return event.title.trim() || EVENT_TYPE_LABEL[event.type]
+  }
   return EVENT_TYPE_LABEL[event.type]
 }
 
-/** 목록용. 정모·추가정모는 시간·장소, WUFL/SUFA는 상대·장소. */
+/** 목록용. 정모·추가정모는 시간·장소, 경기·대회는 상대·장소. */
 export function getEventPreview(event: ClubEvent, compact = false): EventPreview {
   if (isJeongmoType(event.type)) {
     return {
@@ -120,7 +127,7 @@ export type TodayOrNext = {
 
 export function getTodayOrNextSessions(events: ClubEvent[], today: string): TodayOrNext | null {
   const sessions = events
-    .filter((event) => isJeongmoType(event.type) || event.type === 'wufl')
+    .filter((event) => isJeongmoType(event.type) || isMatchType(event.type))
     .sort((a, b) => a.date.localeCompare(b.date) || byTimeThenTitle(a, b))
 
   const todayEvents = sessions.filter((event) => event.date === today)

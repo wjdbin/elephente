@@ -56,10 +56,16 @@ export function CalendarPage() {
           <i className="inline-block h-1.5 w-1.5 rounded-full bg-brand/60" /> 추가정모
         </span>
         <span className="inline-flex items-center gap-1">
-          <i className="inline-block h-1.5 w-1.5 rounded-full bg-match" /> WUFL
+          <i className="inline-block h-1.5 w-1.5 rounded-full bg-match" /> 킥키타카
         </span>
         <span className="inline-flex items-center gap-1">
           <i className="inline-block h-1.5 w-1.5 rounded-full bg-tourney" /> SUFA
+        </span>
+        <span className="inline-flex items-center gap-1">
+          <i className="inline-block h-1.5 w-1.5 rounded-full bg-friendly" /> 친선
+        </span>
+        <span className="inline-flex items-center gap-1">
+          <i className="inline-block h-1.5 w-1.5 rounded-full bg-other" /> 기타 대회
         </span>
       </div>
 
